@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ถึงชาลิ... 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            pink: '#FFD1DC',
+                            rose: '#FF85A1',
+                            softPink: '#FFE5EC',
+                            purple: '#E9D5FF',
+                            softYellow: '#FEF08A',
+                            darkText: '#4A3E56'
+                        }
+                    },
+                    fontFamily: {
+                        itim: ['Itim', 'cursive'],
+                        kanit: ['Kanit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(160deg, #FFE5EC 0%, #F3E8FF 50%, #FFF0F5 100%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: #4A3E56;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .font-handwriting {
+            font-family: 'Itim', cursive;
+        }
+
+        /* Glassmorphism Card Style for Mobile */
+        .mobile-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 12px 32px rgba(230, 160, 195, 0.22);
+        }
+
+        /* Background & Confetti Canvas */
+        #bgCanvas, #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #bgCanvas { z-index: 0; }
+        #confettiCanvas { z-index: 50; }
+
+        /* Smooth Dodge Motion with Scale Elastic Animation */
+        .dodge-btn-fullscreen {
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform, top, left;
+        }
+
+        /* Expanding Yes Button Transition */
+        #btnYes {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        /* Expandable Card Motion */
+        .expandable-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-out, opacity 0.25s ease-out, padding 0.3s ease;
+        }
+
+        .expandable-card.active .expandable-content {
+            max-height: 140px;
+            opacity: 1;
+        }
+
+        /* Pulse Heart */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14%, 42% { transform: scale(1.15); }
+            28% { transform: scale(1); }
+        }
+
+        .animate-heartbeat {
+            animation: heartbeat 1.8s infinite;
+        }
+
+        /* Float Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .animate-float {
+            animation: floatSlow 3.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-[100dvh] justify-between items-center px-4 py-3 relative overflow-hidden">
+
+    <!-- Floating Background Hearts Canvas -->
+    <canvas id="bgCanvas"></canvas>
+    <!-- Fireworks Confetti Canvas -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Mobile Top Navigation Bar -->
+    <header class="w-full max-w-sm flex justify-between items-center z-20 pt-1 pb-2">
+        <div class="flex items-center space-x-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm border border-pink-100">
+            <span class="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span>
+            <span class="text-xs font-medium text-rose-500 font-handwriting">For Chali 💕</span>
+        </div>
+        <button id="soundToggle" onclick="toggleSound()" class="w-9 h-9 rounded-full bg-white/85 backdrop-blur-md shadow-sm border border-pink-200 flex items-center justify-center text-rose-400 active:scale-90 transition" aria-label="Toggle Sound">
+            <i class="fa-solid fa-volume-high text-xs" id="soundIcon"></i>
+        </button>
+    </header>
+
+    <!-- Main Content Container Optimized for Mobile Screen Height -->
+    <main class="w-full max-w-sm flex-1 flex flex-col justify-center items-center z-10 my-auto py-2">
+
+        <!-- STEP 1: WELCOME / BAR MEMORY CARD -->
+        <section id="step1" class="w-full flex flex-col items-center space-y-4 animate-fade-in">
+            <div class="mobile-card rounded-3xl p-5 sm:p-6 w-full text-center space-y-4 relative">
+                
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-100 to-purple-100 flex items-center justify-center mx-auto text-3xl shadow-inner animate-float">
+                    🍸✨
+                </div>
+
+                <div class="space-y-2">
+                    <span class="inline-block px-3 py-1 bg-pink-100 text-rose-500 rounded-full text-[11px] font-semibold tracking-wide">
+                        ถึงชาลิ... 💖
+                    </span>
+                    <h1 class="text-2xl font-bold text-gray-800 font-handwriting">
+                        จำคืนนั้นที่ร้านได้ป่าว?
+                    </h1>
+                </div>
+
+                <p class="text-xs text-gray-600 leading-relaxed font-normal">
+                    ถึงเราจะไม่ได้คุย ไม่ได้เจอกันบ่อย แต่จำรอยยิ้มเธอได้แม่นเลย <span class="font-semibold text-rose-500">เวลายิ้มเหมือนเด็กตัวน้อยโคตรน่ารัก</span> แถมชาลิยังเป็นคนนิสัยดีน่ารักมากๆ ด้วยนะ 😊
+                </p>
+
+                <button onclick="nextStep(1, 2)" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 text-white font-medium text-sm shadow-md active:scale-95 transition flex items-center justify-center space-x-2">
+                    <span>มี 3 สิ่งน่ารักๆ ของเธออยากบอกด้วย 🌸</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- STEP 2: 3 CUTE THINGS ABOUT CHALI -->
+        <section id="step2" class="hidden w-full flex-col items-center space-y-4">
+            <div class="mobile-card rounded-3xl p-5 sm:p-6 w-full text-center space-y-4">
+                
+                <div class="space-y-1">
+                    <span class="text-[11px] text-rose-400 font-semibold uppercase tracking-wider">3 Cute Things</span>
+                    <h2 class="text-xl font-bold text-gray-800 font-handwriting">
+                        3 สิ่งน่ารักๆ ของชาลิ ✨
+                    </h2>
+                    <p class="text-[11px] text-gray-400">ลองแตะอ่านดูทีละข้อได้เลยน้า 👇</p>
+                </div>
+
+                <!-- 3 Tapable Cards -->
+                <div class="space-y-2.5 text-left w-full">
+                    
+                    <!-- Card 1 -->
+                    <div id="card1" onclick="toggleExpandable(1)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
+                        <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
+                            <span class="flex items-center space-x-2">
+                                <span class="text-base">👧✨</span>
+                                <span class="text-rose-500 font-medium">1. รอยยิ้มละลายโลกได้เลย</span>
+                            </span>
+                            <i id="icon1" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
+                        </div>
+                        <div class="expandable-content px-3.5 pb-3 text-[11.5px] text-gray-500 leading-relaxed border-t border-pink-100/60 pt-2">
+                            เวลายิ้มทีไรโลกสดใสมาก น่าเอ็นดูสุดๆ ใครเห็นก็ต้องแอบยิ้มตามแน่นอน ☺️
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div id="card2" onclick="toggleExpandable(2)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
+                        <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
+                            <span class="flex items-center space-x-2">
+                                <span class="text-base">💖</span>
+                                <span class="text-rose-500 font-medium">2. ทำไมน่ารักขนาดนี้</span>
+                            </span>
+                            <i id="icon2" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
+                        </div>
+                        <div class="expandable-content px-3.5 pb-3 text-[11.5px] text-gray-500 leading-relaxed border-t border-pink-100/60 pt-2">
+                            จิตใจดี นิสัยก็น่ารัก อยู่ใกล้แล้วโคตรเอ็นดูมากๆ เลย 🌸
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div id="card3" onclick="toggleExpandable(3)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
+                        <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
+                            <span class="flex items-center space-x-2">
+                                <span class="text-base">✨</span>
+                                <span class="text-rose-500 font-medium">3. แต่ว่าาาา</span>
+                            </span>
+                            <i id="icon3" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
+                        </div>
+                        <div class="expandable-content px-3.5 pb-3 text-[11.5px] text-gray-500 leading-relaxed border-t border-pink-100/60 pt-2">
+                            ตอนนี้ยังไม่ได้คุยกันบ่อยก็เลยอยากทำความรู้จักชาลิให้มากกว่านี้น่ะ 😊
+                        </div>
+                    </div>
+
+                </div>
+
+                <button onclick="nextStep(2, 3)" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 text-white font-medium text-sm shadow-md active:scale-95 transition flex items-center justify-center space-x-2">
+                    <span>มีอะไรจะถามด้วยแหละะะ 🙈</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- STEP 3: THE QUESTION & INTERACTIVE DECISION -->
+        <section id="step3" class="hidden w-full flex-col items-center space-y-4">
+            <div class="mobile-card rounded-3xl p-5 sm:p-6 w-full text-center space-y-5 relative">
+                
+                <div class="w-14 h-14 rounded-full bg-pink-100 text-rose-500 flex items-center justify-center mx-auto shadow-inner text-2xl animate-heartbeat">
+                    🍹🍰
+                </div>
+
+                <div class="space-y-2">
+                    <h2 class="text-xl font-bold text-gray-800 leading-snug">
+                        ชาลิ... <br>
+                        <span class="text-rose-500 font-handwriting text-2xl sm:text-3xl">ไปหาของอร่อยๆ กินด้วยกันสักมื้อไหม?</span>
+                    </h2>
+                    <p class="text-[11px] text-gray-400">สัญญาว่าจะพาไปร้านอร่อยๆ ตามใจเท่าที่แกชอบเลยย ☕✨</p>
+                </div>
+
+                <!-- Interactive Buttons Area -->
+                <div id="btnContainer" class="relative w-full min-h-[140px] flex flex-col items-center justify-center gap-3 pt-2">
+                    
+                    <!-- YES BUTTON (Grows bigger on dodge) -->
+                    <button id="btnYes" onclick="handleAcceptance()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-500 text-white font-semibold text-sm shadow-lg shadow-pink-200 active:scale-95 cursor-pointer z-10 flex items-center justify-center space-x-2">
+                        <span>ตกลงเลย! 💕</span>
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+
+                    <!-- FULLSCREEN DODGING NO BUTTON -->
+                    <button id="btnNo" 
+                            onpointerdown="dodgeButtonFullscreen(event)" 
+                            ontouchstart="dodgeButtonFullscreen(event)"
+                            onmouseover="dodgeButtonFullscreen(event)"
+                            class="dodge-btn-fullscreen w-full py-3 px-5 rounded-2xl bg-gray-100 text-gray-500 font-medium text-xs border border-gray-200 shadow-sm z-30 cursor-pointer whitespace-nowrap">
+                        <span id="noBtnText">ขอคิดดูก่อนนะ 🙈</span>
+                    </button>
+
+                </div>
+
+                <div id="dodgeHint" class="text-[11px] text-rose-400 h-4 transition-opacity duration-300 opacity-0 font-medium">
+                    แอบกดปุ่มนี้ยากหน่อยน้าา~ 😉
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SUCCESS CELEBRATION MODAL OVERLAY -->
+    <div id="successModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="mobile-card rounded-3xl p-6 max-w-sm w-full text-center space-y-5 border-2 border-pink-300 shadow-2xl relative animate-float">
+            
+            <div class="relative">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-pink-200 to-purple-200 flex items-center justify-center mx-auto shadow-md text-3xl animate-heartbeat">
+                    🥳✨
+                </div>
+                <span class="absolute top-0 right-10 text-2xl animate-bounce">💖</span>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold text-rose-500 font-handwriting">
+                    เย้! สัญญาว่าจะพาไปกินของอร่อยๆ! 🍰🧋
+                </h3>
+                <p class="text-xs text-gray-600 leading-relaxed">
+                    ดีใจจัง! แชตมาบอกเวลาที่สะดวกได้เลยนะ ชาลิ ไว้ไปหาของกินอร่อยๆ เราอยากรู้จักแกมากกก 🍹✨
+                </p>
+            </div>
+
+            <div class="p-3 bg-pink-50/80 rounded-2xl border border-pink-200 text-xs text-rose-600 font-medium space-y-1">
+                <p>📩 ทักแชตบอกเวลาที่สะดวกได้เลยน้า</p>
+                <p class="text-[10px] text-gray-400">(คัดลอกข้อความน่ารักๆ ด้านล่างไปส่งใน IG ได้เลย)</p>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="copyToClipboard()" id="copyBtn" class="w-full py-3.5 px-5 rounded-2xl bg-rose-400 hover:bg-rose-500 text-white font-medium text-xs shadow-md transition flex items-center justify-center space-x-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copyBtnText">คัดลอกข้อความไปส่งใน IG 💬</span>
+                </button>
+                
+                <button onclick="resetApp()" class="py-1 text-[11px] text-gray-400 hover:text-rose-400 transition">
+                    🔄 ลองเล่นใหม่อีกรอบ
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mobile Footer -->
+    <footer class="w-full text-center py-2 text-[11px] text-gray-400 z-10 font-light">
+        Made with 💖 for Chali
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* ==========================================
+           1. Web Audio Synthesizer (No external audio files)
+           ========================================== */
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('soundIcon');
+            if (isMuted) {
+                icon.className = 'fa-solid fa-volume-xmark text-gray-300';
+            } else {
+                icon.className = 'fa-solid fa-volume-high text-rose-400';
+                playPopSound();
+            }
+        }
+
+        function playPopSound() {
+            if (isMuted) return;
+            initAudio();
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
+
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        function playDodgeSound() {
+            if (isMuted) return;
+            initAudio();
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(700, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.09);
+
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.09);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.09);
+            } catch (e) {}
+        }
+
+        function playVictorySound() {
+            if (isMuted) return;
+            initAudio();
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
+                    try {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.4);
+                    } catch (e) {}
+                }, idx * 100);
+            });
+        }
+
+        /* ==========================================
+           2. Floating Hearts Background Canvas
+           ========================================== */
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgParticles = [];
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        class BgParticle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = bgCanvas.height + 20;
+                this.size = Math.random() * 10 + 6;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.opacity = Math.random() * 0.4 + 0.2;
+                this.color = ['#FFD1DC', '#FFB6C1', '#E9D5FF', '#FFE5EC'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += Math.sin(this.y * 0.02) * 0.4;
+                if (this.y < -20) this.reset();
+            }
+            draw() {
+                bgCtx.save();
+                bgCtx.globalAlpha = this.opacity;
+                bgCtx.fillStyle = this.color;
+                bgCtx.beginPath();
+                const x = this.x, y = this.y, size = this.size;
+                bgCtx.moveTo(x, y);
+                bgCtx.bezierCurveTo(x - size/2, y - size/2, x - size, y + size/3, x, y + size);
+                bgCtx.bezierCurveTo(x + size, y + size/3, x + size/2, y - size/2, x, y);
+                bgCtx.fill();
+                bgCtx.restore();
+            }
+        }
+
+        for (let i = 0; i < 20; i++) {
+            const p = new BgParticle();
+            p.y = Math.random() * bgCanvas.height;
+            bgParticles.push(p);
+        }
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgParticles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        /* ==========================================
+           3. Confetti Fireworks Canvas
+           ========================================== */
+        const confettiCanvas = document.getElementById('confettiCanvas');
+        const confettiCtx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+
+        function resizeConfettiCanvas() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        resizeConfettiCanvas();
+
+        class Confetti {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 10 + 5;
+                this.vx = (Math.random() - 0.5) * 12;
+                this.vy = (Math.random() - 0.8) * 14;
+                this.gravity = 0.3;
+                this.color = ['#FF85A1', '#FFB6C1', '#E9D5FF', '#FEF08A', '#FFD1DC'][Math.floor(Math.random() * 5)];
+                this.opacity = 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.vy += this.gravity;
+                this.y += this.vy;
+                this.opacity -= 0.015;
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                confettiCtx.save();
+                confettiCtx.globalAlpha = Math.max(0, this.opacity);
+                confettiCtx.fillStyle = this.color;
+                confettiCtx.beginPath();
+                confettiCtx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+                confettiCtx.fill();
+                confettiCtx.restore();
+            }
+        }
+
+        function triggerConfetti() {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            confettiParticles = [];
+            for (let i = 0; i < 80; i++) {
+                confettiParticles.push(new Confetti(cx, cy));
+            }
+        }
+
+        function animateConfetti() {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                if (p.opacity <= 0) confettiParticles.splice(idx, 1);
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+        animateConfetti();
+
+        /* ==========================================
+           4. Navigation & Expand Mechanics
+           ========================================== */
+        function nextStep(current, next) {
+            playPopSound();
+            document.getElementById(`step${current}`).classList.add('hidden');
+            const nextEl = document.getElementById(`step${next}`);
+            nextEl.classList.remove('hidden');
+            nextEl.classList.add('flex');
+            
+            if (next === 2) {
+                toggleExpandable(1); // Auto expand first card
+            }
+        }
+
+        function toggleExpandable(num) {
+            playPopSound();
+            for (let i = 1; i <= 3; i++) {
+                const card = document.getElementById(`card${i}`);
+                const icon = document.getElementById(`icon${i}`);
+                if (i === num) {
+                    const isAlreadyActive = card.classList.contains('active');
+                    card.classList.toggle('active', !isAlreadyActive);
+                    icon.style.transform = !isAlreadyActive ? 'rotate(180deg)' : 'rotate(0deg)';
+                } else {
+                    card.classList.remove('active');
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        /* ==========================================
+           5. FULLSCREEN DODGING BUTTON LOGIC
+           ========================================== */
+        let dodgeCount = 0;
+        let yesScale = 1.0;
+        const maxDodges = 6;
+        const dodgeTexts = [
+            "ขอคิดดูก่อนนะ 🙈",
+            "จับไม่ได้หรอก~ 😜",
+            "แน่จริงก็กดให้ทันสิ! ⚡",
+            "ปุ่มนี้ล็อกไว้แล้ว! 🔒",
+            "ยอมกดตกลงเถอะน้า 🥺",
+            "งอนแล้วนะ! 😜",
+            "ตกลงก็ได้! 💖"
+        ];
+
+        function dodgeButtonFullscreen(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            if (dodgeCount >= maxDodges) return;
+
+            dodgeCount++;
+            playDodgeSound();
+
+            const btn = document.getElementById('btnNo');
+            const btnText = document.getElementById('noBtnText');
+            const hint = document.getElementById('dodgeHint');
+            const btnYes = document.getElementById('btnYes');
+
+            hint.classList.remove('opacity-0');
+
+            // 1. Expand the YES button gradually
+            yesScale += 0.08;
+            btnYes.style.transform = `scale(${yesScale})`;
+
+            if (dodgeCount < maxDodges) {
+                btnText.textContent = dodgeTexts[dodgeCount];
+
+                // 2. Set button to fixed position and dodge anywhere across full screen bounds
+                const btnWidth = btn.offsetWidth || 140;
+                const btnHeight = btn.offsetHeight || 44;
+                const padding = 20;
+
+                const maxX = window.innerWidth - btnWidth - padding;
+                const maxY = window.innerHeight - btnHeight - padding;
+
+                const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+                btn.style.position = 'fixed';
+                btn.style.left = `${randomX}px`;
+                btn.style.top = `${randomY}px`;
+                btn.style.zIndex = '40';
+
+                hint.textContent = "แอบหนีไปรอบห้องแล้วนะชาลิ! 😜";
+            } else {
+                // Final Dodge -> Converts into agreement button!
+                btnText.textContent = dodgeTexts[maxDodges];
+                btn.style.position = 'relative';
+                btn.style.left = 'auto';
+                btn.style.top = 'auto';
+                btn.style.zIndex = '10';
+                btn.className = "dodge-btn-fullscreen w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-400 to-rose-300 text-white font-semibold text-xs shadow-md transition z-10 cursor-pointer flex items-center justify-center space-x-2";
+                
+                btn.onpointerdown = handleAcceptance;
+                btn.ontouchstart = handleAcceptance;
+                btn.onclick = handleAcceptance;
+                hint.textContent = "กดอันไหนก็คำตอบเดียวกันแล้วน้าา~ 💕";
+            }
+        }
+
+        /* ==========================================
+           6. Handle Final Acceptance & Clipboard Copy
+           ========================================== */
+        function handleAcceptance() {
+            playVictorySound();
+            triggerConfetti();
+
+            // Reset Dodge Button style if active
+            const btnNo = document.getElementById('btnNo');
+            btnNo.style.display = 'none';
+
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function copyToClipboard() {
+            playPopSound();
+            const textToCopy = "ไปกินของอร่อยกันน เรายอมแล้ววณัฐ ไปวัน...... ดีมั้ยย";
+            
+            // Clipboard fallback strategy
+            const textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+            textarea.style.position = "fixed";
+            textarea.style.left = "-9999px";
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {}
+            
+            document.body.removeChild(textarea);
+
+            const btnText = document.getElementById('copyBtnText');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            btnText.textContent = "คัดลอกส่งใน IG แล้ว! 💌";
+            copyBtn.classList.remove('bg-rose-400', 'hover:bg-rose-500');
+            copyBtn.classList.add('bg-emerald-500');
+
+            setTimeout(() => {
+                btnText.textContent = "คัดลอกข้อความไปส่งใน IG 💬";
+                copyBtn.classList.remove('bg-emerald-500');
+                copyBtn.classList.add('bg-rose-400');
+            }, 3000);
+        }
+
+        function resetApp() {
+            playPopSound();
+            dodgeCount = 0;
+            yesScale = 1.0;
+
+            const btnYes = document.getElementById('btnYes');
+            btnYes.style.transform = `scale(1)`;
+
+            const btn = document.getElementById('btnNo');
+            const btnText = document.getElementById('noBtnText');
+            btn.style.display = 'block';
+            btn.style.position = 'relative';
+            btn.style.left = 'auto';
+            btn.style.top = 'auto';
+            btnText.textContent = dodgeTexts[0];
+
+            btn.className = "dodge-btn-fullscreen w-full py-3 px-5 rounded-2xl bg-gray-100 text-gray-500 font-medium text-xs border border-gray-200 shadow-sm z-30 cursor-pointer whitespace-nowrap";
+            btn.onpointerdown = dodgeButtonFullscreen;
+            btn.ontouchstart = dodgeButtonFullscreen;
+            btn.onmouseover = dodgeButtonFullscreen;
+
+            document.getElementById('dodgeHint').classList.add('opacity-0');
+            document.getElementById('successModal').classList.add('hidden');
+
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step1').classList.add('flex');
+        }
+    </script>
+</body>
+</html>
