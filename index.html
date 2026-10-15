@@ -58,7 +58,7 @@
 
         /* Glassmorphism Card Style for Mobile */
         .mobile-card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.93);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1.5px solid rgba(255, 255, 255, 0.9);
@@ -78,7 +78,7 @@
         #bgCanvas { z-index: 0; }
         #confettiCanvas { z-index: 50; }
 
-        /* Smooth Dodge Motion with Scale Elastic Animation */
+        /* Smooth Dodge Motion */
         .dodge-btn-fullscreen {
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             will-change: transform, top, left;
@@ -104,6 +104,17 @@
         .expandable-card.active .expandable-content {
             max-height: 140px;
             opacity: 1;
+        }
+
+        /* Envelope Open Animation */
+        @keyframes openEnvelope {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.08) rotate(-2deg); }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        .animate-open-envelope {
+            animation: openEnvelope 0.6s forwards ease-in-out;
         }
 
         /* Pulse Heart */
@@ -149,8 +160,39 @@
     <!-- Main Content Container Optimized for Mobile Screen Height -->
     <main class="w-full max-w-sm flex-1 flex flex-col justify-center items-center z-10 my-auto py-2">
 
+        <!-- STEP 0: SECRET LETTER ENVELOPE CARD -->
+        <section id="step0" class="w-full flex flex-col items-center space-y-4 animate-fade-in">
+            <div id="envelopeCard" onclick="openEnvelope()" class="mobile-card rounded-3xl p-6 w-full text-center space-y-5 cursor-pointer active:scale-98 transition transform">
+                <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+                    <div class="w-20 h-20 bg-rose-100 rounded-2xl flex items-center justify-center text-4xl shadow-inner animate-float">
+                        💌
+                    </div>
+                    <div class="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs shadow-md animate-bounce">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <span class="text-xs text-rose-400 font-semibold uppercase tracking-wider">Secret Letter</span>
+                    <h1 class="text-2xl font-bold text-gray-800 font-handwriting">
+                        คุณมีจดหมายค้างอยู่ 1 ฉบับ
+                    </h1>
+                    <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                        ส่งจดหมายมาให้คนอ่านยิ้ม ถ้าคนอ่านไม่ยิ้มคนส่งคงเสียใจแย่
+                    </p>
+                </div>
+
+                <div class="pt-2">
+                    <div class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 text-white font-medium text-xs shadow-md flex items-center justify-center space-x-2">
+                        <span>แตะเปิดดูจดหมาย 🌸</span>
+                        <i class="fa-solid fa-envelope-open text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- STEP 1: WELCOME / BAR MEMORY CARD -->
-        <section id="step1" class="w-full flex flex-col items-center space-y-4 animate-fade-in">
+        <section id="step1" class="hidden w-full flex-col items-center space-y-4">
             <div class="mobile-card rounded-3xl p-5 sm:p-6 w-full text-center space-y-4 relative">
                 
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-100 to-purple-100 flex items-center justify-center mx-auto text-3xl shadow-inner animate-float">
@@ -161,17 +203,17 @@
                     <span class="inline-block px-3 py-1 bg-pink-100 text-rose-500 rounded-full text-[11px] font-semibold tracking-wide">
                         ถึงชาลิ... 💖
                     </span>
-                    <h1 class="text-2xl font-bold text-gray-800 font-handwriting">
-                        จำคืนนั้นที่ร้านได้ป่าว?
-                    </h1>
+                    <h2 class="text-2xl font-bold text-gray-800 font-handwriting">
+                        จำคืนนั้นที่ร้านได้มั้ย?
+                    </h2>
                 </div>
 
                 <p class="text-xs text-gray-600 leading-relaxed font-normal">
-                    ถึงเราจะไม่ได้คุย ไม่ได้เจอกันบ่อย แต่จำรอยยิ้มเธอได้แม่นเลย <span class="font-semibold text-rose-500">เวลายิ้มเหมือนเด็กตัวน้อยโคตรน่ารัก</span> บางทีก็แอบหาทางออกไม่เจอเหมือนกันนะ เพราะมัวแต่หลงแกอยู่เนี่ยย 😽😽
+                    แกรู้มั้ย วันนั้นที่เจอแกเราคิดแค่ว่า <span class="font-semibold text-rose-500">ทำไมแกเวลายิ้มมันน่ารักงี้อ่ะ</span> คุยไปคุยมารู้ตัวอีกทีเราก็ตกหลุมรักแกไปแล้วอ่ะดิ่ แต่เนื้อหาในจดหมายไม่ได้มีแค่นี้นะะ ลองกดปุ่มดูก่อนน
                 </p>
 
                 <button onclick="nextStep(1, 2)" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 text-white font-medium text-sm shadow-md active:scale-95 transition flex items-center justify-center space-x-2">
-                    <span>มี 3 สิ่งน่ารักๆ ของเธออยากบอกด้วย 🌸</span>
+                    <span>มีอะไรอยากบอกด้วยยย 🌸</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </div>
@@ -182,9 +224,8 @@
             <div class="mobile-card rounded-3xl p-5 sm:p-6 w-full text-center space-y-4">
                 
                 <div class="space-y-1">
-                    <span class="text-[11px] text-rose-400 font-semibold uppercase tracking-wider">3 Cute Things</span>
                     <h2 class="text-xl font-bold text-gray-800 font-handwriting">
-                        3 สิ่งน่ารักๆ ของแก ✨
+                        CUTE THINGS ABOUT YOU💗
                     </h2>
                     <p class="text-[11px] text-gray-400">ลองแตะอ่านดูทีละข้อได้เลยน้า 👇</p>
                 </div>
@@ -196,13 +237,13 @@
                     <div id="card1" onclick="toggleExpandable(1)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
                         <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
                             <span class="flex items-center space-x-2">
-                                <span class="text-base">👧✨</span>
-                                <span class="text-rose-500 font-medium">1. รอยยิ้มละลายโลกได้เลย</span>
+                                <span class="text-base">🌏</span>
+                                <span class="text-rose-500 font-medium">1. ยิ้มทีอย่างกับโลกเป็นสีชมพู</span>
                             </span>
                             <i id="icon1" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
                         </div>
                         <div class="expandable-content px-3.5 pb-3 text-[11.5px] text-gray-500 leading-relaxed border-t border-pink-100/60 pt-2">
-                            เวลายิ้มทีไรโลกสดใสมาก น่าเอ็นดูสุดๆ ใครเห็นก็ต้องแอบยิ้มตามเลยอ่ะ
+                            เวลาแกยิ้มอ่ะ เหมือนโลกเรามีแค่แกเลย เป็นสีชมพูไปหมดดด อย่างกับเราตกอยู่ในโลกที่มีแค่แกกับเรา 🫣🫣
                         </div>
                     </div>
 
@@ -210,8 +251,8 @@
                     <div id="card2" onclick="toggleExpandable(2)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
                         <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
                             <span class="flex items-center space-x-2">
-                                <span class="text-base">💖</span>
-                                <span class="text-rose-500 font-medium">2. ทำไมน่ารักขนาดนี้</span>
+                                <span class="text-base">💗</span>
+                                <span class="text-rose-500 font-medium">2. น่ารักขนาดนี้ผมก็เหลวเลยอ่ะดิ่</span>
                             </span>
                             <i id="icon2" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
                         </div>
@@ -224,20 +265,20 @@
                     <div id="card3" onclick="toggleExpandable(3)" class="expandable-card border border-pink-200/70 rounded-2xl bg-white/80 overflow-hidden shadow-sm active:bg-pink-50/50 transition cursor-pointer">
                         <div class="p-3.5 flex justify-between items-center text-xs font-semibold text-gray-700">
                             <span class="flex items-center space-x-2">
-                                <span class="text-base">✨</span>
+                                <span class="text-base">👉👈</span>
                                 <span class="text-rose-500 font-medium">3. แต่ว่าาาา</span>
                             </span>
                             <i id="icon3" class="fa-solid fa-chevron-down text-[10px] text-rose-400 transition-transform duration-300"></i>
                         </div>
                         <div class="expandable-content px-3.5 pb-3 text-[11.5px] text-gray-500 leading-relaxed border-t border-pink-100/60 pt-2">
-                            ตอนนี้ยังไม่ได้คุยกันบ่อยก็เลยอยากทำความรู้จักชาลิให้มากกว่านี้น่ะ 😊
+                            ตอนนี้ไม่ค่อยได้คุยกันเลยย ก็เลยอยากจะคุยกับแกมากกว่านี้อ่ะะ เผื่อแกจะตกหลุมรักเราเหมือนที่เราตกหลุมรักแกบ้างง 🫣🫣
                         </div>
                     </div>
 
                 </div>
 
                 <button onclick="nextStep(2, 3)" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 text-white font-medium text-sm shadow-md active:scale-95 transition flex items-center justify-center space-x-2">
-                    <span>มีอะไรจะถามด้วยแหละะะ 🙈</span>
+                    <span>มีอะไรจะถามด้วยแหละะะ 🙈😽😝</span>
                 </button>
             </div>
         </section>
@@ -255,7 +296,7 @@
                         ชาลิ... <br>
                         <span class="text-rose-500 font-handwriting text-2xl sm:text-3xl">ไปหาของอร่อยๆ กินด้วยกันสักมื้อไหม?</span>
                     </h2>
-                    <p class="text-[11px] text-gray-400">สัญญาว่าจะพาไปร้านอร่อยๆ ตามใจเท่าที่แกชอบเลยย ☕✨</p>
+                    <p class="text-[11px] text-gray-400">สัญญาว่าจะพาไปร้านอร่อยๆ ตามใจแบบที่แกชอบเลยย ☕✨</p>
                 </div>
 
                 <!-- Interactive Buttons Area -->
@@ -295,21 +336,21 @@
                 <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-pink-200 to-purple-200 flex items-center justify-center mx-auto shadow-md text-3xl animate-heartbeat">
                     🥳✨
                 </div>
-                <span class="absolute top-0 right-10 text-2xl animate-bounce">💖</span>
+                <span class="absolute top-0 right-10 text-2xl animate-bounce">💗</span>
             </div>
 
             <div class="space-y-2">
                 <h3 class="text-2xl font-bold text-rose-500 font-handwriting">
-                    เย้! สัญญาว่าจะพาไปกินของอร่อยๆ! 🍰🧋
+                    เย้! สัญญาว่าจะพาไปกินของอร่อยๆเลยย 🍰🧋
                 </h3>
                 <p class="text-xs text-gray-600 leading-relaxed">
-                    ดีใจจัง! แชตมาบอกเวลาที่สะดวกได้เลยนะ ชาลิ ไว้ไปหาของกินอร่อยๆ เราอยากรู้จักแกมากกก 🍹✨
+                    ไว้ไปหาอะไรอร่อยๆกินกันนะะ เราสัญญาจะดูแลแกอย่างดีเลยย เชื่อมั้ยแกคือคนแรกเลยนะที่เราทำให้ขนาดนี้ เพราะงั้นไปกับเราน้าาา
                 </p>
             </div>
 
             <div class="p-3 bg-pink-50/80 rounded-2xl border border-pink-200 text-xs text-rose-600 font-medium space-y-1">
                 <p>📩 ทักแชตบอกเวลาที่สะดวกได้เลยน้า</p>
-                <p class="text-[10px] text-gray-400">(คัดลอกข้อความน่ารักๆ ด้านล่างไปส่งใน IG ได้เลย)</p>
+                <p class="text-[10px] text-gray-400">(คัดลอกข้อความน่ารักๆ ด้านล่างไปส่งใน IG ได้เลยคับบ)</p>
             </div>
 
             <div class="space-y-2">
@@ -334,7 +375,7 @@
     <!-- JavaScript Application Logic -->
     <script>
         /* ==========================================
-           1. Web Audio Synthesizer (No external audio files)
+           1. Web Audio Synthesizer Logic
            ========================================== */
         let audioCtx = null;
         let isMuted = false;
@@ -353,9 +394,9 @@
             isMuted = !isMuted;
             const icon = document.getElementById('soundIcon');
             if (isMuted) {
-                icon.className = 'fa-solid fa-volume-xmark text-gray-300';
+                if (icon) icon.className = 'fa-solid fa-volume-xmark text-gray-300';
             } else {
-                icon.className = 'fa-solid fa-volume-high text-rose-400';
+                if (icon) icon.className = 'fa-solid fa-volume-high text-rose-400';
                 playPopSound();
             }
         }
@@ -546,8 +587,25 @@
         animateConfetti();
 
         /* ==========================================
-           4. Navigation & Expand Mechanics
+           4. Envelope & Navigation Mechanics
            ========================================== */
+        function openEnvelope() {
+            initAudio();
+            playPopSound();
+
+            const envelopeCard = document.getElementById('envelopeCard');
+            if (envelopeCard) {
+                envelopeCard.classList.add('animate-open-envelope');
+            }
+
+            setTimeout(() => {
+                document.getElementById('step0').classList.add('hidden');
+                const step1 = document.getElementById('step1');
+                step1.classList.remove('hidden');
+                step1.classList.add('flex');
+            }, 500);
+        }
+
         function nextStep(current, next) {
             playPopSound();
             document.getElementById(`step${current}`).classList.add('hidden');
@@ -657,7 +715,6 @@
             playVictorySound();
             triggerConfetti();
 
-            // Reset Dodge Button style if active
             const btnNo = document.getElementById('btnNo');
             btnNo.style.display = 'none';
 
@@ -670,7 +727,6 @@
             playPopSound();
             const textToCopy = "ไปกินของอร่อยกันน เรายอมแล้ววณัฐ ไปวัน...... ดีมั้ยย";
             
-            // Clipboard fallback strategy
             const textarea = document.createElement("textarea");
             textarea.value = textToCopy;
             textarea.style.position = "fixed";
@@ -724,8 +780,16 @@
 
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-            document.getElementById('step1').classList.add('flex');
+            document.getElementById('step1').classList.add('hidden');
+
+            const step0 = document.getElementById('step0');
+            step0.classList.remove('hidden');
+            step0.classList.add('flex');
+
+            const envelopeCard = document.getElementById('envelopeCard');
+            if (envelopeCard) {
+                envelopeCard.classList.remove('animate-open-envelope');
+            }
         }
     </script>
 </body>
